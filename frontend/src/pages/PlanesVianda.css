@@ -1,0 +1,71 @@
+.planes-vianda {
+  max-width: 1400px;
+}
+
+@import './Productos.css';
+
+.renovacion-info {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 5px;
+  padding: 12px;
+  margin-bottom: 20px;
+  color: #856404;
+  font-size: 0.9rem;
+}
+
+.dias-semana-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.dia-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dia-checkbox:hover {
+  background: #e9ecef;
+}
+
+.dia-checkbox input[type="checkbox"] {
+  width: auto;
+  cursor: pointer;
+}
+
+.dia-checkbox input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: #3498db;
+}
+
+.pago-section {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+.pago-section h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.pago-section small {
+  display: block;
+  margin-top: 5px;
+  color: #7f8c8d;
+  font-size: 0.85rem;
+}
+

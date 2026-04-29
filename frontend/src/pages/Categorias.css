@@ -1,0 +1,7 @@
+.categorias {
+  max-width: 1400px;
+}
+
+/* Reutiliza estilos de Productos.css */
+@import './Productos.css';
+

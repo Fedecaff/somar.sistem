@@ -1,0 +1,92 @@
+.reportes {
+  max-width: 1400px;
+}
+
+@import './Productos.css';
+
+.reporte-controls {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.reporte-controls .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.reporte-controls label {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.reporte-controls input,
+.reporte-controls select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.reporte-resultado {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.reporte-resultado h2 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.reporte-resultado pre {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.card-metric {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-metric span {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.card-metric strong {
+  color: #2c3e50;
+  font-size: 1.25rem;
+}
+
+.reporte-table {
+  margin-top: 10px;
+}
+
+.empty-report {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 18px;
+  color: #6c757d;
+}
+
