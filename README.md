@@ -2,7 +2,7 @@
 
 Sistema de gestión completo para rotisería con control de ventas, viandas y promociones.
 
-## 🚀 Características
+##  Características
 
 - ✅ Autenticación JWT con roles (admin, cajera)
 - ✅ Gestión de productos y categorías
@@ -13,13 +13,13 @@ Sistema de gestión completo para rotisería con control de ventas, viandas y pr
 - ✅ Generación de tickets (venta y cocina)
 - ✅ Reportes y consultas
 
-## 📋 Requisitos
+##  Requisitos
 
 - Node.js 14+ 
 - PostgreSQL 12+ (local o cloud)
 - npm o yarn
 
-## 🛠️ Instalación
+##  Instalación
 
 ### 1. Clonar e instalar dependencias
 
@@ -65,7 +65,7 @@ Credenciales por defecto:
 - Username: `admin`
 - Password: `admin123`
 
-**⚠️ IMPORTANTE:** Cambiar la contraseña después del primer login.
+** IMPORTANTE:** Cambiar la contraseña después del primer login.
 
 ### 5. Iniciar Servidor
 
@@ -75,7 +75,7 @@ npm run dev
 
 El servidor estará disponible en `http://localhost:3000`
 
-## 📚 Documentación de API
+##  Documentación de API
 
 ### Documentación Interactiva (Swagger)
 
@@ -105,7 +105,7 @@ Ver archivo `docs/API.md` para documentación completa de endpoints.
 - **Promociones:** `/api/promociones`
 - **Reportes:** `/api/reportes`
 
-## 🗂️ Estructura del Proyecto
+##  Estructura del Proyecto
 
 ```
 ├── database/
@@ -125,27 +125,27 @@ Ver archivo `docs/API.md` para documentación completa de endpoints.
 └── package.json
 ```
 
-## 🔐 Roles
+##  Roles
 
 - **admin:** Acceso completo al sistema
 - **cajera:** Puede realizar ventas y consultas básicas
 
-## 📝 Notas
+##  Notas
 
 - El sistema usa soft delete (marca como inactivo, no elimina)
 - Los tickets se generan automáticamente al crear ventas
 - Las promociones se aplican automáticamente si cumplen condiciones
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 Ver [SETUP.md](./SETUP.md) para problemas comunes de configuración.
 
-## 📖 Documentación Adicional
+##  Documentación Adicional
 
 - **API:** `docs/API.md` - Documentación completa de endpoints
 - **Optimizaciones:** `docs/OPTIMIZACIONES.md` - Guía de optimizaciones y performance
 - **Setup:** `SETUP.md` - Guía de configuración inicial
 
-## 📄 Licencia
+##  Licencia
 
 ISC
