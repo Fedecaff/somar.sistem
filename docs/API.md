@@ -38,6 +38,7 @@ Authorization: Bearer <tu-token>
 - `POST /api/productos` - Crear producto (admin)
 - `PUT /api/productos/:id` - Actualizar producto (admin)
 - `DELETE /api/productos/:id` - Eliminar producto (admin)
+  - Campos de stock simple: `tiene_control_stock`, `cantidad_disponible`, `cantidad_minima`
 
 ### Categorías
 - `GET /api/categorias` - Listar categorías

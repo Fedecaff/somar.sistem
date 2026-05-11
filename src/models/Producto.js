@@ -76,15 +76,19 @@ class Producto {
       precio,
       es_menu_fijo = false,
       solo_mostrador = false,
+      tiene_control_stock = false,
+      cantidad_disponible = 0,
+      cantidad_minima = 0,
       imagen_url
     } = productoData;
 
     const query = `
       INSERT INTO productos (
         nombre, descripcion, categoria_id, precio,
-        es_menu_fijo, solo_mostrador, imagen_url, activo
+        es_menu_fijo, solo_mostrador, tiene_control_stock,
+        cantidad_disponible, cantidad_minima, imagen_url, activo
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, TRUE)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, TRUE)
       RETURNING *
     `;
     const result = await pool.query(query, [
@@ -94,6 +98,9 @@ class Producto {
       precio,
       es_menu_fijo,
       solo_mostrador,
+      tiene_control_stock,
+      cantidad_disponible,
+      cantidad_minima,
       imagen_url || null
     ]);
     return result.rows[0];
@@ -137,6 +144,18 @@ class Producto {
     if (productoData.imagen_url !== undefined) {
       fields.push(`imagen_url = $${paramCount++}`);
       values.push(productoData.imagen_url || null);
+    }
+    if (productoData.tiene_control_stock !== undefined) {
+      fields.push(`tiene_control_stock = $${paramCount++}`);
+      values.push(productoData.tiene_control_stock);
+    }
+    if (productoData.cantidad_disponible !== undefined) {
+      fields.push(`cantidad_disponible = $${paramCount++}`);
+      values.push(productoData.cantidad_disponible);
+    }
+    if (productoData.cantidad_minima !== undefined) {
+      fields.push(`cantidad_minima = $${paramCount++}`);
+      values.push(productoData.cantidad_minima);
     }
     if (productoData.activo !== undefined) {
       fields.push(`activo = $${paramCount++}`);

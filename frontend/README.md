@@ -82,6 +82,7 @@ El archivo `vite.config.js` está configurado para hacer proxy de las peticiones
 - ✅ Dashboard con estadísticas
 - ✅ CRUD completo de Productos, Categorías, Clientes
 - ✅ Gestión de Ventas
+- ✅ Control de stock simple desde productos
 - ✅ Reportes básicos
 - ✅ Diseño responsive y moderno
 

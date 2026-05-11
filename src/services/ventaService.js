@@ -73,6 +73,7 @@ class VentaService {
     let total = 0;
     const detalles = [];
     const productosInfo = []; // Para guardar info de productos para la descripci?n
+    const stockUpdates = [];
 
     for (const item of productosConsolidados) {
       const producto = await Producto.findById(item.producto_id);
@@ -86,6 +87,18 @@ class VentaService {
 
       if (item.cantidad <= 0) {
         throw new AppError(`La cantidad del producto "${producto.nombre}" debe ser mayor a 0`, 400);
+      }
+
+      if (producto.tiene_control_stock) {
+        const disponible = parseInt(producto.cantidad_disponible || 0, 10);
+        const nuevoStock = disponible - item.cantidad;
+        if (nuevoStock < 0) {
+          throw new AppError(
+            `Stock insuficiente para "${producto.nombre}". Disponible: ${disponible}, Solicitado: ${item.cantidad}`,
+            400
+          );
+        }
+        stockUpdates.push({ producto_id: producto.id, cantidad_disponible: nuevoStock });
       }
 
       // Verificar si hay promoci?n aplicable
@@ -148,6 +161,12 @@ class VentaService {
         ...detalle
       });
       detallesCreados.push(detalleCreado);
+    }
+
+    for (const update of stockUpdates) {
+      await Producto.update(update.producto_id, {
+        cantidad_disponible: update.cantidad_disponible
+      });
     }
 
     // Generar tickets

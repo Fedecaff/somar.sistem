@@ -1,12 +1,13 @@
 # API Rotisería - Sabores de mi Tierra
 
-Sistema de gestión completo para rotisería con control de ventas, viandas y promociones.
+Sistema de gestión completo para rotisería con control de ventas, viandas, promociones y stock simple.
 
 ##  Características
 
 - ✅ Autenticación JWT con roles (admin, cajera)
 - ✅ Gestión de productos y categorías
 - ✅ Menú fijo
+- ✅ Control de stock simple por producto
 - ✅ Sistema de ventas (mostrador y vianda)
 - ✅ Gestión de planes de vianda
 - ✅ Promociones automáticas
@@ -135,6 +136,7 @@ Ver archivo `docs/API.md` para documentación completa de endpoints.
 - El sistema usa soft delete (marca como inactivo, no elimina)
 - Los tickets se generan automáticamente al crear ventas
 - Las promociones se aplican automáticamente si cumplen condiciones
+- El stock se valida y descuenta desde el producto si tiene control activo
 
 ##  Troubleshooting
 

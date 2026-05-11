@@ -15,7 +15,10 @@ const Productos = () => {
     categoria_id: '',
     precio: '',
     es_menu_fijo: false,
-    solo_mostrador: false
+    solo_mostrador: false,
+    tiene_control_stock: false,
+    cantidad_disponible: 0,
+    cantidad_minima: 0
   })
 
   useEffect(() => {
@@ -40,10 +43,15 @@ const Productos = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      const dataToSend = {
+        ...formData,
+        cantidad_disponible: formData.tiene_control_stock ? formData.cantidad_disponible : 0,
+        cantidad_minima: formData.tiene_control_stock ? formData.cantidad_minima : 0
+      }
       if (editing) {
-        await productoService.update(editing.id, formData)
+        await productoService.update(editing.id, dataToSend)
       } else {
-        await productoService.create(formData)
+        await productoService.create(dataToSend)
       }
       setShowModal(false)
       setEditing(null)
@@ -53,7 +61,10 @@ const Productos = () => {
         categoria_id: '',
         precio: '',
         es_menu_fijo: false,
-        solo_mostrador: false
+        solo_mostrador: false,
+        tiene_control_stock: false,
+        cantidad_disponible: 0,
+        cantidad_minima: 0
       })
       loadData()
     } catch (error) {
@@ -69,7 +80,10 @@ const Productos = () => {
       categoria_id: producto.categoria_id,
       precio: producto.precio,
       es_menu_fijo: producto.es_menu_fijo,
-      solo_mostrador: producto.solo_mostrador
+      solo_mostrador: producto.solo_mostrador,
+      tiene_control_stock: producto.tiene_control_stock || false,
+      cantidad_disponible: producto.cantidad_disponible ?? 0,
+      cantidad_minima: producto.cantidad_minima ?? 0
     })
     setShowModal(true)
   }
@@ -136,6 +150,7 @@ const Productos = () => {
               <th>Categoría</th>
               <th>Precio</th>
               <th>Menú Fijo</th>
+              <th>Stock</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
@@ -150,6 +165,11 @@ const Productos = () => {
                   <td>{categoria?.nombre || '-'}</td>
                   <td>${parseFloat(p.precio).toLocaleString()}</td>
                   <td>{p.es_menu_fijo ? 'Sí' : 'No'}</td>
+                  <td>
+                    {p.tiene_control_stock
+                      ? `${p.cantidad_disponible ?? 0} (min ${p.cantidad_minima ?? 0})`
+                      : 'Sin control'}
+                  </td>
                   <td>
                     <span className={`badge ${p.activo ? 'active' : 'inactive'}`}>
                       {p.activo ? 'Activo' : 'Inactivo'}
@@ -249,7 +269,53 @@ const Productos = () => {
                   />
                   Solo Mostrador
                 </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={formData.tiene_control_stock}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        tiene_control_stock: e.target.checked
+                      })
+                    }
+                  />
+                  Control de Stock
+                </label>
               </div>
+              {formData.tiene_control_stock && (
+                <div className="form-group">
+                  <label>Cantidad Disponible *</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.cantidad_disponible}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        cantidad_disponible: e.target.value
+                      })
+                    }
+                    required
+                  />
+                </div>
+              )}
+              {formData.tiene_control_stock && (
+                <div className="form-group">
+                  <label>Cantidad Mínima</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.cantidad_minima}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        cantidad_minima: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              )}
               <div className="modal-actions">
                 <button type="button" onClick={() => {
                   setShowModal(false)

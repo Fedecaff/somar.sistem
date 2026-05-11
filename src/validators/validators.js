@@ -46,6 +46,15 @@ const validarProducto = [
   body('solo_mostrador')
     .optional()
     .isBoolean().withMessage('solo_mostrador debe ser true o false'),
+  body('tiene_control_stock')
+    .optional()
+    .isBoolean().withMessage('tiene_control_stock debe ser true o false'),
+  body('cantidad_disponible')
+    .optional()
+    .isInt({ min: 0 }).withMessage('cantidad_disponible debe ser un entero mayor o igual a 0'),
+  body('cantidad_minima')
+    .optional()
+    .isInt({ min: 0 }).withMessage('cantidad_minima debe ser un entero mayor o igual a 0'),
   validate
 ];
 
@@ -67,6 +76,15 @@ const validarProductoUpdate = [
   body('solo_mostrador')
     .optional()
     .isBoolean().withMessage('solo_mostrador debe ser true o false'),
+  body('tiene_control_stock')
+    .optional()
+    .isBoolean().withMessage('tiene_control_stock debe ser true o false'),
+  body('cantidad_disponible')
+    .optional()
+    .isInt({ min: 0 }).withMessage('cantidad_disponible debe ser un entero mayor o igual a 0'),
+  body('cantidad_minima')
+    .optional()
+    .isInt({ min: 0 }).withMessage('cantidad_minima debe ser un entero mayor o igual a 0'),
   body('activo')
     .optional()
     .isBoolean().withMessage('activo debe ser true o false'),
