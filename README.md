@@ -1,153 +1,270 @@
-# API Rotisería - Sabores de mi Tierra
+# Sistema de Gestión Mayorista
 
-Sistema de gestión completo para rotisería con control de ventas, viandas, promociones y stock simple.
+Sistema web MVP para gestión de almacén mayorista de frutas y verduras en Argentina.
 
-##  Características
+## 🚀 Tecnologías
 
-- ✅ Autenticación JWT con roles (admin, cajera)
-- ✅ Gestión de productos y categorías
-- ✅ Menú fijo
-- ✅ Control de stock simple por producto
-- ✅ Sistema de ventas (mostrador y vianda)
-- ✅ Gestión de planes de vianda
-- ✅ Promociones automáticas
-- ✅ Generación de tickets (venta y cocina)
-- ✅ Reportes y consultas
+- **Framework**: Next.js 14 (App Router)
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS
+- **Base de datos**: PostgreSQL
+- **ORM**: Prisma
+- **Autenticación**: NextAuth.js (credentials provider con bcrypt)
+- **Deploy**: Vercel-ready
 
-##  Requisitos
+## 📋 Funcionalidades
 
-- Node.js 14+ 
-- PostgreSQL 12+ (local o cloud)
+### Para Administradores (`/admin`)
+- Dashboard con métricas clave
+- Gestión de productos (CRUD completo)
+- Registro de ingresos de stock
+- Gestión de clientes (CRUD completo)
+- Gestión de pedidos:
+  - Crear pedidos con múltiples productos
+  - Asignar pedidos a armadores
+  - Cambiar estado de pedidos
+  - Ver detalles completos
+
+### Para Armadores/Pickers (`/picker`)
+- Vista móvil optimizada con tap targets grandes
+- Lista de pedidos asignados
+- Detalle de pedido con checklist de productos
+- Actualización de cantidades armadas
+- Marcar pedidos como listos
+
+## 🗄️ Modelo de Datos
+
+- **User**: admin | picker
+- **Product**: nombre, unidad (kg/cajón/unidad), activo
+- **StockLot**: registro de ingresos de stock con fecha y cantidad
+- **Customer**: clientes con teléfono y notas
+- **Order**: pedidos con estado (pending/assigned/picking/ready/delivered/cancelled)
+- **OrderItem**: items del pedido con cantidades solicitadas y armadas
+
+### Regla de stock (MVP simplificado)
+Stock disponible ≈ suma(StockLot.quantity) − suma(OrderItem.quantityPicked para pedidos no cancelados)
+
+> **Nota**: Esta es una implementación MVP. Para producción se recomienda implementar un sistema más robusto de tracking de inventario con reservas y actualizaciones en tiempo real.
+
+## 🛠️ Instalación y Configuración
+
+### Requisitos previos
+- Node.js 18+ 
+- PostgreSQL 14+
 - npm o yarn
 
-##  Instalación
+### 1. Clonar el repositorio
 
-### 1. Clonar e instalar dependencias
+```bash
+git clone https://github.com/Fedecaff/somar.sistem.git
+cd somar.sistem
+```
+
+### 2. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-### 2. Configurar Base de Datos
+### 3. Configurar variables de entorno
 
-Ver instrucciones detalladas en [SETUP.md](./SETUP.md)
-
-**Resumen rápido para PostgreSQL Local:**
-1. Instalar PostgreSQL
-2. Crear base de datos: `CREATE DATABASE rotiseria_db;`
-3. Ejecutar script: `psql -U postgres -d rotiseria_db -f database/schema.sql`
-
-### 3. Configurar Variables de Entorno
-
-Copiar `.env` y configurar:
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=rotiseria_db
-DB_USER=postgres
-DB_PASSWORD=tu-password
-DB_SSL=false
-
-JWT_SECRET=tu-secret-key-muy-segura
-JWT_EXPIRES_IN=24h
-
-PORT=3000
-NODE_ENV=development
-```
-
-### 4. Crear Usuario Administrador
+Copiar el archivo de ejemplo y configurar:
 
 ```bash
-node scripts/createAdmin.js
+cp .env.example .env
 ```
 
-Credenciales por defecto:
-- Username: `admin`
-- Password: `admin123`
+Editar `.env` con tus credenciales:
 
-** IMPORTANTE:** Cambiar la contraseña después del primer login.
+```env
+# Base de datos PostgreSQL
+DATABASE_URL="postgresql://usuario:contraseña@localhost:5432/mayorista_db?schema=public"
 
-### 5. Iniciar Servidor
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="genera-un-secreto-seguro-con-openssl-rand-base64-32"
+```
+
+Para generar un `NEXTAUTH_SECRET` seguro:
+
+```bash
+openssl rand -base64 32
+```
+
+### 4. Crear la base de datos
+
+```bash
+# Conectarse a PostgreSQL
+psql -U postgres
+
+# Crear la base de datos
+CREATE DATABASE mayorista_db;
+
+# Salir de psql
+\q
+```
+
+### 5. Ejecutar migraciones de Prisma
+
+```bash
+npm run prisma:migrate
+```
+
+### 6. Cargar datos de prueba (seed)
+
+```bash
+npm run prisma:seed
+```
+
+Esto creará:
+- 1 administrador
+- 2 armadores (pickers)
+- 8 productos (frutas y verduras)
+- Stock inicial para todos los productos
+- 3 clientes
+- 2 pedidos de ejemplo
+
+### 7. Iniciar el servidor de desarrollo
 
 ```bash
 npm run dev
 ```
 
-El servidor estará disponible en `http://localhost:3000`
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000)
 
-##  Documentación de API
+## 👥 Usuarios de Prueba
 
-### Documentación Interactiva (Swagger)
+### Administrador
+- **Email**: admin@mayorista.com
+- **Contraseña**: admin123
 
-Una vez iniciado el servidor, accede a la documentación interactiva:
+### Armadores
+- **Email**: juan@mayorista.com | **Contraseña**: picker123
+- **Email**: maria@mayorista.com | **Contraseña**: picker123
+
+> ⚠️ **IMPORTANTE**: Estas contraseñas son solo para desarrollo local. En producción, cambiar todas las contraseñas y usar credenciales seguras.
+
+## 📦 Comandos Disponibles
+
+```bash
+# Desarrollo
+npm run dev              # Inicia el servidor de desarrollo
+
+# Build
+npm run build            # Compila la aplicación para producción
+npm run start            # Inicia la aplicación en modo producción
+
+# Base de datos
+npm run prisma:migrate   # Ejecuta las migraciones
+npm run prisma:seed      # Carga datos de prueba
+npx prisma studio        # Abre Prisma Studio (GUI para la DB)
+
+# Otros
+npm run lint             # Ejecuta el linter
 ```
-http://localhost:3000/api-docs
+
+## 🚀 Deploy en Vercel
+
+1. Push el código a GitHub
+2. Conectar el repositorio en [Vercel](https://vercel.com)
+3. Configurar las variables de entorno en Vercel:
+   - `DATABASE_URL`
+   - `NEXTAUTH_URL` (URL de producción)
+   - `NEXTAUTH_SECRET`
+4. Vercel detectará automáticamente Next.js y lo desplegará
+
+### Base de datos en producción
+Se recomienda usar servicios como:
+- [Neon](https://neon.tech) (PostgreSQL serverless)
+- [Supabase](https://supabase.com) (PostgreSQL managed)
+- [Railway](https://railway.app) (PostgreSQL managed)
+
+## 📱 Uso de la Aplicación
+
+### Flujo típico:
+
+1. **Admin** crea productos y registra stock entrante
+2. **Admin** crea clientes
+3. **Admin** crea un pedido para un cliente con varios productos
+4. **Admin** asigna el pedido a un armador (picker)
+5. **Picker** ve el pedido en su lista (`/picker`)
+6. **Picker** abre el pedido y comienza a armarlo
+7. **Picker** actualiza las cantidades armadas de cada producto
+8. **Picker** marca el pedido como "Listo"
+9. **Admin** puede cambiar el estado a "Entregado" cuando corresponda
+
+## 🔐 Seguridad
+
+- Contraseñas hasheadas con bcrypt (10 rounds)
+- Autenticación con NextAuth.js (JWT)
+- Rutas protegidas por rol (admin/picker)
+- Validación en servidor para todas las operaciones críticas
+
+## 🎯 Fuera de Alcance (MVP)
+
+Esta versión MVP **NO incluye**:
+- ❌ Integración con WhatsApp
+- ❌ Sistema de pagos
+- ❌ Multi-almacén / Multi-sucursal
+- ❌ Reportes avanzados
+- ❌ Gestión de proveedores
+- ❌ Sistema de precios
+- ❌ Facturas / Comprobantes
+
+Estas funcionalidades pueden agregarse en iteraciones futuras.
+
+## 📝 Estructura del Proyecto
+
 ```
-
-### Documentación Manual
-
-Ver archivo `docs/API.md` para documentación completa de endpoints.
-
-### Autenticación
-
-- `POST /api/auth/login` - Iniciar sesión
-- `GET /api/auth/me` - Obtener usuario actual
-
-### Endpoints Principales
-
-- **Productos:** `/api/productos`
-- **Categorías:** `/api/categorias`
-- **Clientes:** `/api/clientes`
-- **Ventas:** `/api/ventas`
-- **Planes Vianda:** `/api/planes-vianda`
-- **Retiros Vianda:** `/api/retiros-vianda`
-- **Pagos Vianda:** `/api/pagos-vianda`
-- **Promociones:** `/api/promociones`
-- **Reportes:** `/api/reportes`
-
-##  Estructura del Proyecto
-
-```
-├── database/
-│   └── schema.sql          # Script SQL completo
-├── scripts/
-│   └── createAdmin.js      # Script para crear admin
+/
+├── prisma/
+│   ├── schema.prisma      # Esquema de la base de datos
+│   └── seed.ts            # Script de datos de prueba
 ├── src/
-│   ├── config/             # Configuraciones
-│   ├── controllers/        # Controladores
-│   ├── models/            # Modelos de BD
-│   ├── routes/            # Rutas
-│   ├── services/          # Lógica de negocio
-│   ├── middleware/        # Middlewares
-│   ├── utils/             # Utilidades
-│   └── server.js           # Servidor principal
-├── .env                    # Variables de entorno
+│   ├── app/
+│   │   ├── admin/         # Páginas del panel administrativo
+│   │   ├── picker/        # Páginas de armadores
+│   │   ├── api/           # API routes
+│   │   └── login/         # Página de login
+│   ├── components/        # Componentes reutilizables
+│   ├── lib/               # Utilidades (Prisma, auth helpers)
+│   └── types/             # Definiciones de tipos TypeScript
+├── .env.example           # Ejemplo de variables de entorno
 └── package.json
 ```
 
-##  Roles
+## 🐛 Troubleshooting
 
-- **admin:** Acceso completo al sistema
-- **cajera:** Puede realizar ventas y consultas básicas
+### Error: "Can't reach database server"
+- Verificar que PostgreSQL esté corriendo
+- Verificar credenciales en `DATABASE_URL`
+- Verificar que la base de datos exista
 
-##  Notas
+### Error de autenticación
+- Verificar que `NEXTAUTH_SECRET` esté configurado
+- Verificar que `NEXTAUTH_URL` coincida con la URL actual
+- Limpiar cookies del navegador
 
-- El sistema usa soft delete (marca como inactivo, no elimina)
-- Los tickets se generan automáticamente al crear ventas
-- Las promociones se aplican automáticamente si cumplen condiciones
-- El stock se valida y descuenta desde el producto si tiene control activo
+### Error en build
+```bash
+rm -rf .next node_modules
+npm install
+npm run build
+```
 
-##  Troubleshooting
+## 📄 Licencia
 
-Ver [SETUP.md](./SETUP.md) para problemas comunes de configuración.
+Este proyecto es un MVP de demostración.
 
-##  Documentación Adicional
+## 🤝 Contribuciones
 
-- **API:** `docs/API.md` - Documentación completa de endpoints
-- **Optimizaciones:** `docs/OPTIMIZACIONES.md` - Guía de optimizaciones y performance
-- **Setup:** `SETUP.md` - Guía de configuración inicial
+Para contribuir al proyecto:
+1. Fork el repositorio
+2. Crear una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit los cambios (`git commit -am 'Agrega nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Crear un Pull Request
 
-##  Licencia
+---
 
-ISC
+Desarrollado con ❤️ para mayoristas de frutas y verduras en Argentina
