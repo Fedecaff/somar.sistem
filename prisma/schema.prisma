@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  picker
+}
+
+enum ProductUnit {
+  kg
+  cajon
+  unidad
+}
+
+enum OrderStatus {
+  pending
+  assigned
+  picking
+  ready
+  delivered
+  cancelled
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  createdAt    DateTime @default(now())
+  
+  assignedOrders Order[] @relation("AssignedPicker")
+}
+
+model Product {
+  id        String      @id @default(cuid())
+  name      String
+  unit      ProductUnit
+  active    Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  
+  stockLots  StockLot[]
+  orderItems OrderItem[]
+}
+
+model StockLot {
+  id         String   @id @default(cuid())
+  productId  String
+  receivedAt DateTime
+  quantity   Float
+  notes      String?
+  createdAt  DateTime @default(now())
+  
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@index([productId])
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  notes     String?
+  createdAt DateTime @default(now())
+  
+  orders Order[]
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  customerId       String
+  status           OrderStatus @default(pending)
+  assignedPickerId String?
+  notes            String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  
+  customer       Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  assignedPicker User?       @relation("AssignedPicker", fields: [assignedPickerId], references: [id])
+  items          OrderItem[]
+  
+  @@index([customerId])
+  @@index([assignedPickerId])
+  @@index([status])
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  productId       String
+  quantityOrdered Float
+  quantityPicked  Float   @default(0)
+  
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@index([orderId])
+  @@index([productId])
+}

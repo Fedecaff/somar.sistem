@@ -1,32 +1,37 @@
 {
-  "name": "sabores-de-mi-tierra-api",
-  "version": "1.0.0",
-  "description": "API para sistema de gestión de rotisería",
-  "main": "src/server.js",
+  "name": "mayorista-warehouse",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "tsx prisma/seed.ts"
   },
-  "keywords": [
-    "rotiseria",
-    "api",
-    "rest"
-  ],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "next": "14.2.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "next-auth": "^4.24.7",
     "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-validator": "^7.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.3"
+    "@prisma/client": "^5.20.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "typescript": "^5.6.2",
+    "@types/node": "^22.5.5",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.0",
+    "@types/bcryptjs": "^2.4.6",
+    "tailwindcss": "^3.4.12",
+    "postcss": "^8.4.47",
+    "autoprefixer": "^10.4.20",
+    "prisma": "^5.20.0",
+    "tsx": "^4.19.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.13"
   }
 }

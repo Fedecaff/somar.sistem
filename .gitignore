@@ -7,6 +7,13 @@ yarn.lock
 .env
 .env.local
 .env.production
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Next.js
+.next/
+out/
 
 # Logs
 logs
@@ -34,3 +41,11 @@ build/
 tmp/
 temp/
 
+# Testing
+coverage/
+
+# Vercel
+.vercel
+
+# Prisma
+prisma/.env
